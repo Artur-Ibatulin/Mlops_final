@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Informing') {
+            steps {
+                echo '--- Environment info ---'
+                sh 'python3 --version'
+                sh 'python3 -m pip --version'
+            }
+        }
+        stage('Getting repo') {
+            steps {
+                echo 'clone the repo'
+                sh 'rm -fr Mlops_final'
+                sh 'rm -fr requirements.txt'
+                sh 'git clone https://github.com/Artur-Ibatulin/Mlops_final.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'stage 2'
+                sh 'python3 -m pip install --upgrade -r ./Mlops_final/requirements.txt'
+                sh 'chmod u+x ./Mlops_final/main.py'
+                sh 'python3 ./Mlops_final/test_main.py'
+                sh 'python3 ./Mlops_final/main.py'
+            }
+        }
+    }
+}
